@@ -21,12 +21,12 @@ jobs:
 
     - uses: 'google-github-actions/auth@v2'
       with:
-        workload_identity_provider: {{ secrets.WIF_PROVIDER }}
-        service_account: {{ secrets.WIF_SERVICE_ACCOUNT }}
+        workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
+        service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
 
     - id: 'deploy'
       uses: 'google-github-actions/deploy-cloudrun@v2'
       with:
-        region: {{ env.REGION }}
-        service: {{ env.SERVICE }}
+        region: ${{ env.REGION }}
+        service: ${{ env.SERVICE }}
         source: ./
