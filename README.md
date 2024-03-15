@@ -26,8 +26,7 @@ docker run --rm -p 8080:8080 -it $(docker build -q .)
 
 ```
 gcloud init
-gcloud builds submit --tag gcr.io/tucon-cce32/tucon_backend
-gcloud run deploy --image gcr.io/tucon-cce32/tucon_backend
+gcloud run deploy tuconbackend --region=us-east1 --source=.
 ```
 
 ## Useful links
