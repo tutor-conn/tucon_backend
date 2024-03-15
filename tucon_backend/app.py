@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return "Welcome to Tucon! test"
+    return "Welcome to Tucon! if you see this message, then the CI is working!"
 
 
 # This is used for local development and not used when deploying through Cloud Run
