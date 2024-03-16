@@ -1,1 +1,4 @@
 .DS_Store
+.env
+tucon.db
+__pycache__/

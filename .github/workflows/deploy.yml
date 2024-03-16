@@ -30,3 +30,6 @@ jobs:
         region: ${{ env.REGION }}
         service: ${{ env.SERVICE }}
         source: ./
+        env_vars: |
+          TURSO_DATABASE_URL=${{ secrets.TURSO_DATABASE_URL }}
+          TURSO_AUTH_TOKEN=${{ secrets.TURSO_AUTH_TOKEN }}

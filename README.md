@@ -16,7 +16,7 @@ python tucon_backend/app.py
 To test using Docker:
 
 ```bash
-docker run --rm -p 8080:8080 -it $(docker build -q .)
+docker run --rm --env-file .env -p 8080:8080 -it $(docker build -q .)
 ```
 
 ## Manual deploy to Google Cloud Run
