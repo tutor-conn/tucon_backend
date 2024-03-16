@@ -19,13 +19,23 @@ To test using Docker:
 docker run --rm --env-file .env -p 8080:8080 -it $(docker build -q .)
 ```
 
+## Database
+
+[Turso](https://turso.tech/) is used for the database.
+
+```bash
+python3 exec_sql.py tucon_backend/schema.sql # runs schema script
+python3 exec_sql.py tucon_backend/seed.sql # runs seed script
+```
+
 ## Manual deploy to Google Cloud Run
 
 1. Install Google Cloud CLI - https://cloud.google.com/sdk/docs/install-sdk
 2. Run the following commands. Note that 'tucon-cce32' is the firebase projectID.
 
-```
+```bash
 gcloud init
+# note: you may need to set environment variables for the below to work
 gcloud run deploy tuconbackend --region=us-east1 --source=.
 ```
 
