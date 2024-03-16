@@ -10,12 +10,13 @@ Flask-based server that supports handling request from the Next.js front-end app
 
 ```bash
 pip install -r requirements.txt
-python tucon_backend/app.py
+python main.py
 ```
 
 To test using Docker:
 
 ```bash
+# note: entrypoint for docker is tucon_backend/__init__.py:app
 docker run --rm --env-file .env -p 8080:8080 -it $(docker build -q .)
 ```
 

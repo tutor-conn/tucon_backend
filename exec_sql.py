@@ -17,9 +17,13 @@ def run_sqlscript(filename: str):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python exec_sql.py <filename.sql>")
+        print(
+            "Usage: python exec_sql.py <filename> (e.g. python exec_sql.py schema.sql)"
+        )
         sys.exit(1)
 
     filename = sys.argv[1]
+
+    assert filename.endswith(".sql"), "Expected filename to end with .sql"
 
     run_sqlscript(filename)
