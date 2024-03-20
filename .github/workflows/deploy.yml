@@ -33,3 +33,7 @@ jobs:
         env_vars: |
           TURSO_DATABASE_URL=${{ secrets.TURSO_DATABASE_URL }}
           TURSO_AUTH_TOKEN=${{ secrets.TURSO_AUTH_TOKEN }}
+          UPSTASH_REDIS_HOST=${{ secrets.UPSTASH_REDIS_HOST }}
+          UPSTASH_REDIS_PORT=${{ secrets.UPSTASH_REDIS_PORT }}
+          UPSTASH_REDIS_PASSWORD=${{ secrets.UPSTASH_REDIS_PASSWORD }}
+          FLASK_SECRET_KEY=${{ secrets.FLASK_SECRET_KEY }}
