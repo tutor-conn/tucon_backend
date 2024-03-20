@@ -1,4 +1,4 @@
-from tucon_backend.db import get_connection
+from tucon_backend.db import get_db_connection
 from dotenv import load_dotenv
 import sys
 
@@ -6,7 +6,7 @@ load_dotenv()
 
 
 def run_sqlscript(filename: str):
-    conn = get_connection()
+    conn = get_db_connection()
 
     with open(filename, "r") as f:
         contents = f.read()

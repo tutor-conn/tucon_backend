@@ -8,7 +8,7 @@ def get_db_connection() -> sqlite3.Connection:
     config = get_config()
 
     if config.ENV == "dev":
-        return libsql.connect(config.TURSO_DB_PATH)
+        return libsql.connect(config.TURSO_DB_PATH, debug=True)
 
     url = config.TURSO_DATABASE_URL
     auth_token = config.TURSO_AUTH_TOKEN
