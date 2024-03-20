@@ -4,11 +4,10 @@ from sqlalchemy.orm import Session
 
 from tucon_backend.config import get_config
 
-
 _engine: Optional[Engine] = None
 
 
-def create_db_session():
+def get_engine():
     global _engine
 
     config = get_config()
@@ -23,4 +22,8 @@ def create_db_session():
         dbUrl, connect_args={"check_same_thread": False}, echo=(config.ENV == "dev")
     )
 
-    return Session(_engine)
+    return _engine
+
+
+def create_db_session():
+    return Session(get_engine())

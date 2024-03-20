@@ -20,6 +20,12 @@ class CreateStudentProfileBody(BaseModel):
     city: Optional[str] = Field(max_length=128, default=None)
 
 
+class CreateTutorProfileBody(BaseModel):
+    bio: Optional[str] = Field(max_length=1024, default=None)
+    payRate: float = Field(ge=0)
+    city: Optional[str] = Field(max_length=128, default=None)
+
+
 def create_student_profile(user_id: int, profile: CreateStudentProfileBody):
     session = create_db_session()
 
@@ -35,10 +41,31 @@ def create_student_profile(user_id: int, profile: CreateStudentProfileBody):
             )
         )
     except IntegrityError:
-        raise Conflict("Profile already exists")
-
+        raise Conflict("Student profile already exists")
     session.execute(
         update(User).where(User.id == user_id).values(last_view=LastView.StudentHome)
+    )
+    session.commit()
+
+
+def create_tutor_profile(user_id: int, profile: CreateTutorProfileBody):
+    session = create_db_session()
+
+    try:
+        session.execute(
+            insert(Profile).values(
+                user_id=user_id,
+                profile_type=ProfileType.Tutor,
+                bio=profile.bio,
+                pay_rate1=profile.payRate,
+                pay_rate2=None,
+                city=profile.city,
+            )
+        )
+    except IntegrityError:
+        raise Conflict("Tutor profile already exists")
+    session.execute(
+        update(User).where(User.id == user_id).values(last_view=LastView.TutorHome)
     )
     session.commit()
 
@@ -48,4 +75,12 @@ def create_student_profile(user_id: int, profile: CreateStudentProfileBody):
 @validate()
 def post_profiles_student(user_id: int, body: CreateStudentProfileBody):
     create_student_profile(user_id, body)
-    return {"message": "Profile created successfully"}, 201
+    return {"message": "Student profile created successfully"}, 201
+
+
+@app.route("/profiles/tutor", methods=["POST"])
+@login_required
+@validate()
+def post_profiles_tutor(user_id: int, body: CreateTutorProfileBody):
+    create_tutor_profile(user_id, body)
+    return {"message": "Tutor profile created successfully"}, 201

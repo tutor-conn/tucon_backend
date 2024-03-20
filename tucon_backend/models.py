@@ -1,5 +1,5 @@
 from typing import Optional
-from sqlalchemy import Float, ForeignKey, Integer, String
+from sqlalchemy import Float, ForeignKey, Integer, String, UniqueConstraint
 from sqlalchemy.orm import DeclarativeBase, relationship
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
@@ -33,3 +33,5 @@ class Profile(Base):
     city: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
     user = relationship("User", back_populates="profile")
+
+    __table_args__ = (UniqueConstraint("user_id", "profile_type"),)
