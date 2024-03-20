@@ -8,7 +8,9 @@ import tucon_backend.middlewares.flask_session
 
 # ======== Routes      ========
 import tucon_backend.views.index
-import tucon_backend.views.auth.routes
+
+import tucon_backend.views.profiles
+import tucon_backend.views.auth
 
 
 @app.errorhandler(HTTPException)

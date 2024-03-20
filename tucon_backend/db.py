@@ -1,16 +1,26 @@
-import sqlite3
-import libsql_experimental as libsql
+from typing import Optional
+from sqlalchemy import create_engine, Engine
+from sqlalchemy.orm import Session
 
 from tucon_backend.config import get_config
 
 
-def get_db_connection() -> sqlite3.Connection:
+_engine: Optional[Engine] = None
+
+
+def create_db_session():
+    global _engine
+
     config = get_config()
 
-    if config.ENV == "dev":
-        return libsql.connect(config.TURSO_DB_PATH, debug=True)
+    dbUrl = f"sqlite+{config.TURSO_DATABASE_URL}/?authToken={config.TURSO_AUTH_TOKEN}&secure=true"
 
-    url = config.TURSO_DATABASE_URL
-    auth_token = config.TURSO_AUTH_TOKEN
-    conn = libsql.connect(url, auth_token=auth_token)
-    return conn
+    # use local sqlite db in dev
+    if config.ENV == "dev":
+        dbUrl = f"sqlite:///{config.TURSO_DB_PATH}"
+
+    _engine = _engine or create_engine(
+        dbUrl, connect_args={"check_same_thread": False}, echo=(config.ENV == "dev")
+    )
+
+    return Session(_engine)

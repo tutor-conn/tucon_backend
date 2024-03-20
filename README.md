@@ -22,12 +22,7 @@ docker run --rm --env-file .env -p 8080:8080 -it $(docker build -q .)
 
 ## Database
 
-[Turso](https://turso.tech/) is used for the database.
-
-```bash
-python3 exec_sql.py tucon_backend/schema.sql # runs schema script
-python3 exec_sql.py tucon_backend/seed.sql # runs seed script
-```
+SQLAlchemy is the ORM, using SQLite in local development and [Turso](https://turso.tech/) in production.
 
 ## Manual deploy to Google Cloud Run
 
