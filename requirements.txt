@@ -1,8 +1,10 @@
 Flask==3.0.2
 Flask-Pydantic==0.12.0
+Flask-Session==0.7.0
+redis==5.0.3
 libsql-experimental==0.0.27
 python-dotenv==1.0.1
 pydantic==2.6.4
+email-validator==2.1.1
 argon2-cffi==23.1.0
 Werkzeug==3.0.1
-email-validator==2.1.1

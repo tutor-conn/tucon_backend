@@ -3,8 +3,12 @@ from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
 
-import tucon_backend.routes.index
-import tucon_backend.routes.users
+# ======== Middlewares ========
+import tucon_backend.middlewares.flask_session
+
+# ======== Routes      ========
+import tucon_backend.views.index
+import tucon_backend.views.auth.routes
 
 
 @app.errorhandler(HTTPException)
