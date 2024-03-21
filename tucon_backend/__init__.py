@@ -4,6 +4,7 @@ from werkzeug.exceptions import HTTPException
 app = Flask(__name__)
 
 # ======== Middlewares ========
+import tucon_backend.middlewares.cors
 import tucon_backend.middlewares.flask_session
 
 # ======== Routes      ========
