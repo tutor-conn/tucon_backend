@@ -12,6 +12,9 @@ redis = Redis(
     ssl=True,
 )
 app.config.update(
+    # NOTE: '__session' is a special value that bypasses Firebase Hosting's cache
+    # See https://firebase.google.com/docs/hosting/manage-cache#using_cookies
+    SESSION_COOKIE_NAME="__session",
     SESSION_COOKIE_SECURE=True,
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE="Lax",
