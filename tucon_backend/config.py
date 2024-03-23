@@ -12,6 +12,7 @@ class Config:
     FLASK_SECRET_KEY: Optional[str]
 
     TURSO_DB_PATH = "tucon.db"
+    CORS_ORIGIN: str = os.getenv("CORS_ORIGIN", "*")
     TURSO_AUTH_TOKEN: str = os.getenv("TURSO_AUTH_TOKEN", "")
     TURSO_DATABASE_URL: str = os.getenv("TURSO_DATABASE_URL", "")
     TURSO_AUTH_TOKEN: str = os.getenv("TURSO_AUTH_TOKEN", "")
