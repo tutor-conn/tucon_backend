@@ -14,6 +14,8 @@ redis = Redis(
 app.config.update(
     SESSION_COOKIE_SECURE=True,
     SESSION_COOKIE_HTTPONLY=True,
+    # FIXME: This is required for the session to work in the frontend
+    #        but maybe this is not the most secure... 🤔
     SESSION_COOKIE_SAMESITE="None",
 )
 app.secret_key = config.FLASK_SECRET_KEY
