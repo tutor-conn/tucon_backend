@@ -1,6 +1,7 @@
+from typing import Optional
 from flask import session
 from sqlalchemy import insert, select
-from werkzeug.exceptions import Conflict, Unauthorized
+from werkzeug.exceptions import Conflict, NotFound, Unauthorized
 from tucon_backend import app
 from tucon_backend.constants import LastView
 from tucon_backend.db import create_db_session
@@ -9,7 +10,6 @@ from flask_pydantic import validate
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 
-from tucon_backend.middlewares.auth import login_required
 from tucon_backend.models import User
 
 
@@ -21,11 +21,9 @@ class RegisterBody(BaseModel):
 
 
 def create_user(user: RegisterBody):
-    session = create_db_session()
+    conn = create_db_session()
 
-    user_with_email = session.execute(
-        select(1).where(User.email == user.email)
-    ).fetchone()
+    user_with_email = conn.execute(select(1).where(User.email == user.email)).fetchone()
 
     if user_with_email:
         raise Conflict("User with this email already exists")
@@ -33,7 +31,7 @@ def create_user(user: RegisterBody):
     ph = PasswordHasher()
     hashed_password = ph.hash(user.password.get_secret_value())
 
-    row = session.execute(
+    row = conn.execute(
         insert(User)
         .values(
             first_name=user.firstName,
@@ -44,7 +42,7 @@ def create_user(user: RegisterBody):
         )
         .returning(User.id)
     ).fetchone()
-    session.commit()
+    conn.commit()
 
     if not row:
         raise Exception("Expected user id to be returned after insert.")
@@ -60,10 +58,10 @@ class LoginBody(BaseModel):
 
 
 def login_user(user: LoginBody):
-    session = create_db_session()
+    conn = create_db_session()
 
-    user_with_email = session.execute(
-        select(User.id, User.last_view, User.password).where(User.email == user.email)
+    user_with_email = conn.execute(
+        select(User.id, User.password).where(User.email == user.email)
     ).fetchone()
 
     if not user_with_email:
@@ -71,7 +69,7 @@ def login_user(user: LoginBody):
         #       that this email exists in the system.
         raise Unauthorized("Incorrect email or password.")
 
-    user_id, last_view, user_password = user_with_email.tuple()
+    user_id, user_password = user_with_email.tuple()
 
     ph = PasswordHasher()
     try:
@@ -79,7 +77,7 @@ def login_user(user: LoginBody):
     except VerifyMismatchError:
         raise Unauthorized("Incorrect email or password.")
 
-    return user_id, last_view
+    return user_id
 
 
 @app.route("/register", methods=["POST"])
@@ -93,18 +91,39 @@ def register(body: RegisterBody):
 @app.route("/login", methods=["POST"])
 @validate()
 def login(body: LoginBody):
-    user_id, last_view = login_user(body)
+    user_id = login_user(body)
     session["user_id"] = user_id
-    return {"lastView": last_view}, 200
+    return {"message": "Logged in successfully"}
 
 
 @app.route("/logout", methods=["POST"])
 def logout():
     session.pop("user_id", default=None)
-    return {"message": "Logged out successfully"}, 200
+    return {"message": "Logged out successfully"}
 
 
 @app.route("/me", methods=["GET"])
-@login_required
-def me(user_id: int):
-    return {"userId": user_id}, 200
+def me():
+    user_id = session.get("user_id")
+
+    if user_id is None:
+        return {"userId": None}
+
+    conn = create_db_session()
+    user = conn.execute(
+        select(User.first_name, User.last_name, User.last_view).where(
+            User.id == user_id
+        )
+    ).fetchone()
+
+    if not user:
+        raise NotFound("User from session not found")
+
+    first_name, last_name, last_view = user.tuple()
+
+    return {
+        "userId": user_id,
+        "firstName": first_name,
+        "lastName": last_name,
+        "lastView": last_view,
+    }

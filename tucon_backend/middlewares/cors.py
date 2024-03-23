@@ -4,4 +4,4 @@ from flask_cors import CORS
 
 config = get_config()
 
-CORS(app, origins=config.CORS_ORIGIN)
+CORS(app, origins=config.CORS_ORIGIN, supports_credentials=True)
