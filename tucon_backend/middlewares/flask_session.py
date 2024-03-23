@@ -11,5 +11,10 @@ redis = Redis(
     password=config.UPSTASH_REDIS_PASSWORD,
     ssl=True,
 )
+app.config.update(
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE="Lax",
+)
 app.secret_key = config.FLASK_SECRET_KEY
 app.session_interface = RedisSessionInterface(app=app, client=redis)
