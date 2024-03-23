@@ -1,5 +1,5 @@
 from typing import Optional
-from flask import session
+from flask import request, session
 from sqlalchemy import insert, select
 from werkzeug.exceptions import Conflict, NotFound, Unauthorized
 from tucon_backend import app
@@ -104,6 +104,8 @@ def logout():
 
 @app.route("/me", methods=["GET"])
 def me():
+    print("debug: /me: headers", request.headers)
+
     user_id = session.get("user_id")
 
     if user_id is None:
