@@ -1,12 +1,12 @@
 from flask_pydantic import validate
 from pydantic import BaseModel
 from tucon_backend import app
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from tucon_backend.middlewares.auth import login_required
 from tucon_backend.models import Message
 
-now = datetime.now()
+now = datetime.now(timezone.utc)
 two_hours_ago = now - timedelta(hours=2)
 four_hours_ago = now - timedelta(hours=4)
 yesterday = now - timedelta(days=1)
@@ -195,7 +195,7 @@ def post_chat_messages(user_id: int, recipient_id: int, body: CreateMessageBody)
     # For demo, user has id=0
     user_id = 0
 
-    now_timestamp = datetime.now().isoformat()
+    now_timestamp = datetime.now(timezone.utc).isoformat()
     demo_messages.append(
         Message(
             id=len(demo_messages) + 1,
