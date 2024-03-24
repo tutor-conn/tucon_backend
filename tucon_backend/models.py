@@ -33,5 +33,31 @@ class Profile(Base):
     city: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
     user = relationship("User", back_populates="profile")
+    messages_sent = relationship(
+        "Message",
+        back_populates="sender",
+        primaryjoin="Profile.id == Message.sender_id",
+    )
+    messages_received = relationship(
+        "Message",
+        back_populates="recipient",
+        primaryjoin="Profile.id == Message.recipient_id",
+    )
 
     __table_args__ = (UniqueConstraint("user_id", "profile_type"),)
+
+
+class Message(Base):
+    __tablename__ = "messages"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    sender_id: Mapped[int] = mapped_column(Integer, ForeignKey("profiles.id"))
+    recipient_id: Mapped[int] = mapped_column(Integer, ForeignKey("profiles.id"))
+    content: Mapped[str] = mapped_column(String)
+    timestamp: Mapped[str] = mapped_column(String)
+
+    sender = relationship(
+        "Profile", back_populates="messages_sent", foreign_keys=[sender_id]
+    )
+    recipient = relationship(
+        "Profile", back_populates="messages_received", foreign_keys=[recipient_id]
+    )

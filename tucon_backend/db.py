@@ -12,14 +12,16 @@ def get_engine():
 
     config = get_config()
 
+    is_dev = config.ENV == "dev"
+
     dbUrl = f"sqlite+{config.TURSO_DATABASE_URL}/?authToken={config.TURSO_AUTH_TOKEN}&secure=true"
 
     # use local sqlite db in dev
-    if config.ENV == "dev":
+    if is_dev:
         dbUrl = f"sqlite:///{config.TURSO_DB_PATH}"
 
     _engine = _engine or create_engine(
-        dbUrl, connect_args={"check_same_thread": False}, echo=(config.ENV == "dev")
+        dbUrl, connect_args={"check_same_thread": False}, echo=is_dev
     )
 
     return _engine
