@@ -3,7 +3,7 @@ class ProfileType:
     Tutor = "tutor"
 
 
-class LastView:
+class UserHome:
     Onboarding = "onboarding"
-    TutorHome = "tutor-home"
-    StudentHome = "student-home"
+    TutorHome = "tutor"
+    StudentHome = "student"

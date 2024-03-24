@@ -4,7 +4,7 @@ from sqlalchemy import insert, update
 from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import Conflict
 from tucon_backend import app
-from tucon_backend.constants import ProfileType, LastView
+from tucon_backend.constants import ProfileType, UserHome
 from tucon_backend.db import create_db_session
 from pydantic import BaseModel, Field
 from flask_pydantic import validate
@@ -43,7 +43,7 @@ def create_student_profile(user_id: int, profile: CreateStudentProfileBody):
     except IntegrityError:
         raise Conflict("Student profile already exists")
     session.execute(
-        update(User).where(User.id == user_id).values(last_view=LastView.StudentHome)
+        update(User).where(User.id == user_id).values(home=UserHome.StudentHome)
     )
     session.commit()
 
@@ -65,7 +65,7 @@ def create_tutor_profile(user_id: int, profile: CreateTutorProfileBody):
     except IntegrityError:
         raise Conflict("Tutor profile already exists")
     session.execute(
-        update(User).where(User.id == user_id).values(last_view=LastView.TutorHome)
+        update(User).where(User.id == user_id).values(home=UserHome.TutorHome)
     )
     session.commit()
 

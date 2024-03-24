@@ -16,7 +16,7 @@ class User(Base):
     last_name: Mapped[str] = mapped_column(String)
     email: Mapped[str] = mapped_column(String)
     password: Mapped[str] = mapped_column(String)
-    last_view: Mapped[str] = mapped_column(String)
+    home: Mapped[str] = mapped_column(String)
 
     profile = relationship("Profile", back_populates="user")
 

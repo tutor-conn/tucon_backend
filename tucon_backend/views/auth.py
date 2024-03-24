@@ -2,7 +2,7 @@ from flask import session
 from sqlalchemy import insert, select
 from werkzeug.exceptions import Conflict, NotFound, Unauthorized
 from tucon_backend import app
-from tucon_backend.constants import LastView
+from tucon_backend.constants import UserHome
 from tucon_backend.db import create_db_session
 from pydantic import BaseModel, EmailStr, Field, SecretStr
 from flask_pydantic import validate
@@ -37,7 +37,7 @@ def create_user(user: RegisterBody):
             last_name=user.lastName,
             email=user.email,
             password=hashed_password,
-            last_view=LastView.Onboarding,
+            home=UserHome.Onboarding,
         )
         .returning(User.id)
     ).fetchone()
@@ -110,19 +110,17 @@ def me():
 
     conn = create_db_session()
     user = conn.execute(
-        select(User.first_name, User.last_name, User.last_view).where(
-            User.id == user_id
-        )
+        select(User.first_name, User.last_name, User.home).where(User.id == user_id)
     ).fetchone()
 
     if not user:
         raise NotFound("User from session not found")
 
-    first_name, last_name, last_view = user.tuple()
+    first_name, last_name, home = user.tuple()
 
     return {
         "userId": user_id,
         "firstName": first_name,
         "lastName": last_name,
-        "lastView": last_view,
+        "home": home,
     }

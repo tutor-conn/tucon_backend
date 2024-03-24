@@ -1,5 +1,5 @@
 from flask_pydantic import validate
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from tucon_backend import app
 from datetime import datetime, timedelta, timezone
 
@@ -185,7 +185,7 @@ def get_chat_messages(user_id: int, recipient_id: int):
 
 
 class CreateMessageBody(BaseModel):
-    content: str
+    content: str = Field(min_length=1, max_length=5000)
 
 
 @app.route("/chats/<recipient_id>/messages", methods=["POST"])
