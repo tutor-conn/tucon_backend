@@ -18,12 +18,20 @@ class CreateStudentProfileBody(BaseModel):
     payRate1: Optional[float] = Field(ge=0, default=None)
     payRate2: Optional[float] = Field(ge=0, default=None)
     city: Optional[str] = Field(max_length=128, default=None)
+    country: Optional[str] = Field(max_length=128, default=None)
+    phone: Optional[str] = Field(max_length=18, default=None)
+    courses: list[str] = Field(default_factory=list)
+    languages: list[str] = Field(default_factory=list)
 
 
 class CreateTutorProfileBody(BaseModel):
     bio: Optional[str] = Field(max_length=1024, default=None)
     payRate: float = Field(ge=0)
     city: Optional[str] = Field(max_length=128, default=None)
+    country: Optional[str] = Field(max_length=128, default=None)
+    phone: Optional[str] = Field(max_length=18, default=None)
+    courses: list[str] = Field(default_factory=list)
+    languages: list[str] = Field(default_factory=list)
 
 
 def create_student_profile(user_id: int, profile: CreateStudentProfileBody):
@@ -34,16 +42,16 @@ def create_student_profile(user_id: int, profile: CreateStudentProfileBody):
             insert(Profile).values(
                 user_id=user_id,
                 profile_type=ProfileType.Student,
-                bio=profile.bio,
-                pay_rate1=profile.payRate1,
-                pay_rate2=profile.payRate2,
-                city=profile.city,
+                # bio=profile.bio,
+                # pay_rate1=profile.payRate1,
+                # pay_rate2=profile.payRate2,
+                # city=profile.city,
             )
         )
     except IntegrityError:
         raise Conflict("Student profile already exists")
     session.execute(
-        update(User).where(User.id == user_id).values(home=UserHome.StudentHome)
+        update(User).where(User.id == user_id).values(home=UserHome.Student)
     )
     session.commit()
 
@@ -56,17 +64,15 @@ def create_tutor_profile(user_id: int, profile: CreateTutorProfileBody):
             insert(Profile).values(
                 user_id=user_id,
                 profile_type=ProfileType.Tutor,
-                bio=profile.bio,
-                pay_rate1=profile.payRate,
-                pay_rate2=None,
-                city=profile.city,
+                # bio=profile.bio,
+                # pay_rate1=profile.payRate,
+                # pay_rate2=None,
+                # city=profile.city,
             )
         )
     except IntegrityError:
         raise Conflict("Tutor profile already exists")
-    session.execute(
-        update(User).where(User.id == user_id).values(home=UserHome.TutorHome)
-    )
+    session.execute(update(User).where(User.id == user_id).values(home=UserHome.Tutor))
     session.commit()
 
 

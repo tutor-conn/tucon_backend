@@ -26,11 +26,14 @@ class Profile(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
     profile_type: Mapped[str] = mapped_column(String)
-    # optional fields
-    bio: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    pay_rate1: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
-    pay_rate2: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
-    city: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+
+    # optional fields - for now, we'll just leave them out
+
+    # bio: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    # pay_rate1: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    # pay_rate2: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    # city: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    # country: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
     user = relationship("User", back_populates="profile")
     messages_sent = relationship(

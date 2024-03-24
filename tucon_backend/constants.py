@@ -5,5 +5,5 @@ class ProfileType:
 
 class UserHome:
     Onboarding = "onboarding"
-    TutorHome = "tutor"
-    StudentHome = "student"
+    Tutor = "tutor"
+    Student = "student"
