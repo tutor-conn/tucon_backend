@@ -143,7 +143,7 @@ demo_messages = [
         timestamp=two_hours_ago.isoformat(),
     ),
     Message(
-        id=4, sender_id=0, recipient_id=1, content=strings[3], timestamp=now.isoformat()
+        id=4, sender_id=1, recipient_id=0, content=strings[3], timestamp=now.isoformat()
     ),
 ]
 
